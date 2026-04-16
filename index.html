@@ -35,11 +35,9 @@
             text-align: center;
         }
 
-        /* Pantallas */
         .screen { display: none; }
         .screen.active { display: block; }
 
-        /* Pantalla de Selección */
         .category-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +62,6 @@
             background: #fffbf5;
         }
 
-        /* Pantalla de Juego */
         #header {
             display: flex;
             justify-content: space-between;
@@ -144,7 +141,6 @@
             margin: 0 5px;
         }
 
-        /* Responsive */
         @media (max-width: 480px) {
             .options-grid, .category-grid { grid-template-columns: 1fr; }
             #image-display { font-size: 80px; }
@@ -154,12 +150,10 @@
 <body>
 
     <div id="game-container">
-        
         <div id="menu-screen" class="screen active">
             <h2>¡Hola! ¿Qué quieres aprender hoy?</h2>
             <p>Elige una categoría para empezar:</p>
-            <div class="category-grid" id="categories-menu">
-                </div>
+            <div class="category-grid" id="categories-menu"></div>
         </div>
 
         <div id="game-screen" class="screen">
@@ -169,82 +163,62 @@
             </div>
 
             <div style="margin-bottom: 15px;">
-                <button class="back-btn" onclick="showMenu()">⬅️ Cambiar Tema</button>
+                <button class="back-btn" onclick="showMenu()">⬅️ Volver</button>
                 <button class="audio-btn" onclick="speakCurrentWord()">🔊 Escuchar</button>
             </div>
             
             <div id="image-display">❓</div>
-
             <div id="feedback"></div>
-
-            <div class="options-grid" id="options">
-                </div>
+            <div class="options-grid" id="options"></div>
         </div>
     </div>
 
     <script>
-        // BASE DE DATOS
         const database = [
-            // ANIMALES
             { p: "león", c: "animales", i: "🦁" }, { p: "tigre", c: "animales", i: "🐯" }, { p: "perro", c: "animales", i: "🐶" }, { p: "gato", c: "animales", i: "🐱" },
             { p: "elefante", c: "animales", i: "🐘" }, { p: "jirafa", c: "animales", i: "🦒" }, { p: "mono", c: "animales", i: "🐵" }, { p: "caballo", c: "animales", i: "🐴" },
             { p: "vaca", c: "animales", i: "🐮" }, { p: "cerdo", c: "animales", i: "🐷" }, { p: "oveja", c: "animales", i: "🐑" }, { p: "gallina", c: "animales", i: "🐔" },
             { p: "pato", c: "animales", i: "🦆" }, { p: "conejo", c: "animales", i: "🐰" }, { p: "ratón", c: "animales", i: "🐭" }, { p: "serpiente", c: "animales", i: "🐍" },
             { p: "rana", c: "animales", i: "🐸" }, { p: "pez", c: "animales", i: "🐟" }, { p: "tiburón", c: "animales", i: "🦈" }, { p: "ballena", c: "animales", i: "🐳" },
-            // FRUTAS Y VERDURAS
             { p: "manzana", c: "frutas", i: "🍎" }, { p: "pera", c: "frutas", i: "🍐" }, { p: "plátano", c: "frutas", i: "🍌" }, { p: "uva", c: "frutas", i: "🍇" },
             { p: "fresa", c: "frutas", i: "🍓" }, { p: "naranja", c: "frutas", i: "🍊" }, { p: "limón", c: "frutas", i: "🍋" }, { p: "piña", c: "frutas", i: "🍍" },
             { p: "sandía", c: "frutas", i: "🍉" }, { p: "cereza", c: "frutas", i: "🍒" }, { p: "kiwi", c: "frutas", i: "🥝" }, { p: "mango", c: "frutas", i: "🥭" },
             { p: "aguacate", c: "frutas", i: "🥑" }, { p: "tomate", c: "frutas", i: "🍅" }, { p: "berenjena", c: "frutas", i: "🍆" }, { p: "zanahoria", c: "frutas", i: "🥕" },
             { p: "maíz", c: "frutas", i: "🌽" }, { p: "brócoli", c: "frutas", i: "🥦" }, { p: "seta", c: "frutas", i: "🍄" }, { p: "patata", c: "frutas", i: "🥔" },
-            // ESCUELA
             { p: "lápiz", c: "escuela", i: "✏️" }, { p: "bolígrafo", c: "escuela", i: "🖊️" }, { p: "libro", c: "escuela", i: "📖" }, { p: "mochila", c: "escuela", i: "🎒" },
             { p: "regla", c: "escuela", i: "📏" }, { p: "tijeras", c: "escuela", i: "✂️" }, { p: "pincel", c: "escuela", i: "🖌️" }, { p: "papel", c: "escuela", i: "📄" },
             { p: "calculadora", c: "escuela", i: "🧮" }, { p: "cuaderno", c: "escuela", i: "📓" }, { p: "pizarra", c: "escuela", i: "📋" }, { p: "clip", c: "escuela", i: "📎" },
-            { p: "lupa", c: "escuela", i: "🔍" }, { p: "globo terráqueo", c: "escuela", i: "🌍" }, { p: "computadora", c: "escuela", i: "💻" }, { p: "ratón", c: "escuela", i: "🖱️" },
-            { p: "teclado", c: "escuela", i: "⌨️" }, { p: "impresora", c: "escuela", i: "🖨️" }, { p: "paleta", c: "escuela", i: "🎨" }, { p: "diccionario", c: "escuela", i: "📚" },
-            // TRANSPORTE
+            { p: "lupa", c: "escuela", i: "🔍" }, { p: "globo terráqueo", c: "escuela", i: "🌍" }, { p: "computadora", c: "escuela", i: "💻" }, { p: "teclado", c: "escuela", i: "⌨️" },
+            { p: "impresora", c: "escuela", i: "🖨️" }, { p: "paleta", c: "escuela", i: "🎨" }, { p: "diccionario", c: "escuela", i: "📚" },
             { p: "coche", c: "transporte", i: "🚗" }, { p: "autobús", c: "transporte", i: "🚌" }, { p: "tren", c: "transporte", i: "🚂" }, { p: "avión", c: "transporte", i: "✈️" },
             { p: "helicóptero", c: "transporte", i: "🚁" }, { p: "barco", c: "transporte", i: "🚢" }, { p: "bicicleta", c: "transporte", i: "🚲" }, { p: "moto", c: "transporte", i: "🏍️" },
             { p: "cohete", c: "transporte", i: "🚀" }, { p: "taxi", c: "transporte", i: "🚕" }, { p: "tractor", c: "transporte", i: "🚜" }, { p: "ambulancia", c: "transporte", i: "🚑" },
             { p: "camión", c: "transporte", i: "🚚" }, { p: "patinete", c: "transporte", i: "🛴" }, { p: "submarino", c: "transporte", i: "🛥️" }, { p: "canoa", c: "transporte", i: "🛶" },
-            { p: "teleférico", c: "transporte", i: "🚠" }, { p: "velero", c: "transporte", i: "⛵" }, { p: "furgoneta", c: "transporte", i: "🚐" }, { p: "tranvía", c: "transporte", i: "🚋" },
-            // ROPA
+            { p: "furgoneta", c: "transporte", i: "🚐" }, { p: "tranvía", c: "transporte", i: "🚋" },
             { p: "camiseta", c: "ropa", i: "👕" }, { p: "pantalón", c: "ropa", i: "👖" }, { p: "vestido", c: "ropa", i: "👗" }, { p: "falda", c: "ropa", i: "👘" },
             { p: "calcetines", c: "ropa", i: "🧦" }, { p: "zapatos", c: "ropa", i: "👞" }, { p: "botas", c: "ropa", i: "🥾" }, { p: "gorra", c: "ropa", i: "🧢" },
             { p: "sombrero", c: "ropa", i: "🎩" }, { p: "guantes", c: "ropa", i: "🧤" }, { p: "bufanda", c: "ropa", i: "🧣" }, { p: "chaqueta", c: "ropa", i: "🧥" },
-            { p: "gafas", c: "ropa", i: "👓" }, { p: "reloj", c: "ropa", i: "⌚" }, { p: "bolso", c: "ropa", i: "👜" }, { p: "paraguas", c: "ropa", i: "🌂" },
-            { p: "corbata", c: "ropa", i: "👔" }, { p: "pijama", c: "ropa", i: "🛌" }, { p: "traje de baño", c: "ropa", i: "🩱" }, { p: "sandalias", c: "ropa", i: "🩴" },
-            // HOGAR
+            { p: "gafas", c: "ropa", i: "👓" }, { p: "reloj", c: "ropa", i: "⌚" }, { p: "bolso", c: "ropa", i: "👜" }, { p: "corbata", c: "ropa", i: "👔" },
+            { p: "pijama", c: "ropa", i: "🛌" }, { p: "sandalias", c: "ropa", i: "🩴" },
             { p: "cama", c: "hogar", i: "🛏️" }, { p: "silla", c: "hogar", i: "🪑" }, { p: "mesa", c: "hogar", i: "🪑" }, { p: "televisor", c: "hogar", i: "📺" },
             { p: "lámpara", c: "hogar", i: "💡" }, { p: "teléfono", c: "hogar", i: "☎️" }, { p: "puerta", c: "hogar", i: "🚪" }, { p: "ventana", c: "hogar", i: "🪟" },
             { p: "sofá", c: "hogar", i: "🛋️" }, { p: "espejo", c: "hogar", i: "🪞" }, { p: "ducha", c: "hogar", i: "🚿" }, { p: "bañera", c: "hogar", i: "🛁" },
-            { p: "reloj de pared", c: "hogar", i: "⏰" }, { p: "llave", c: "hogar", i: "🔑" }, { p: "vela", c: "hogar", i: "🕯️" }, { p: "radio", c: "hogar", i: "📻" },
-            { p: "escoba", c: "hogar", i: "🧹" }, { p: "jabón", c: "hogar", i: "🧼" }, { p: "esponja", c: "hogar", i: "🧽" }, { p: "papelera", c: "hogar", i: "🗑️" },
-            // CUERPO HUMANO
+            { p: "llave", c: "hogar", i: "🔑" }, { p: "vela", c: "hogar", i: "🕯️" }, { p: "radio", c: "hogar", i: "📻" }, { p: "escoba", c: "hogar", i: "🧹" },
+            { p: "jabón", c: "hogar", i: "🧼" }, { p: "papelera", c: "hogar", i: "🗑️" },
             { p: "ojo", c: "cuerpo", i: "👁️" }, { p: "oreja", c: "cuerpo", i: "👂" }, { p: "nariz", c: "cuerpo", i: "👃" }, { p: "boca", c: "cuerpo", i: "👄" },
             { p: "mano", c: "cuerpo", i: "✋" }, { p: "pie", c: "cuerpo", i: "🦶" }, { p: "pierna", c: "cuerpo", i: "🦵" }, { p: "brazo", c: "cuerpo", i: "💪" },
             { p: "dedo", c: "cuerpo", i: "☝️" }, { p: "corazón", c: "cuerpo", i: "❤️" }, { p: "cerebro", c: "cuerpo", i: "🧠" }, { p: "hueso", c: "cuerpo", i: "🦴" },
-            { p: "diente", c: "cuerpo", i: "🦷" }, { p: "lengua", c: "cuerpo", i: "👅" }, { p: "pelo", c: "cuerpo", i: "💇" }, { p: "uñas", c: "cuerpo", i: "💅" },
-            { p: "espalda", c: "cuerpo", i: "🚶" }, { p: "cara", c: "cuerpo", i: "👤" }, { p: "sangre", c: "cuerpo", i: "🩸" }, { p: "rodilla", c: "cuerpo", i: "🦵" },
-            // INSTRUMENTOS
+            { p: "diente", c: "cuerpo", i: "🦷" }, { p: "lengua", c: "cuerpo", i: "👅" }, { p: "uñas", c: "cuerpo", i: "💅" }, { p: "rodilla", c: "cuerpo", i: "🦵" },
             { p: "piano", c: "música", i: "🎹" }, { p: "guitarra", c: "música", i: "🎸" }, { p: "violín", c: "música", i: "🎻" }, { p: "tambor", c: "música", i: "🥁" },
             { p: "trompeta", c: "música", i: "🎺" }, { p: "saxofón", c: "música", i: "🎷" }, { p: "acordeón", c: "música", i: "🪗" }, { p: "flauta", c: "música", i: "🎶" },
             { p: "micrófono", c: "música", i: "🎤" }, { p: "auriculares", c: "música", i: "🎧" }, { p: "altavoz", c: "música", i: "🔊" }, { p: "campana", c: "música", i: "🔔" },
-            { p: "arpa", c: "música", i: "🎼" }, { p: "banjo", c: "música", i: "🪕" }, { p: "platillos", c: "música", i: "🎵" }, { p: "maracas", c: "música", i: "💃" },
-            { p: "partitura", c: "música", i: "📜" }, { p: "metrónomo", c: "música", i: "⏱️" }, { p: "clave de sol", c: "música", i: "🎼" }, { p: "director", c: "música", i: "🕴️" },
-            // NATURALEZA
-            { p: "sol", c: "clima", i: "☀️" }, { p: "luna", c: "clima", i: "🌙" }, { p: "estrella", c: "clima", i: "⭐" }, { p: "nube", c: "clima", i: "☁️" },
-            { p: "lluvia", c: "clima", i: "🌧️" }, { p: "nieve", c: "clima", i: "❄️" }, { p: "rayo", c: "clima", i: "⚡" }, { p: "arcoíris", c: "clima", i: "🌈" },
-            { p: "fuego", c: "clima", i: "🔥" }, { p: "árbol", c: "clima", i: "🌳" }, { p: "flor", c: "clima", i: "🌻" }, { p: "hoja", c: "clima", i: "🍃" },
+            { p: "arpa", c: "música", i: "🎼" }, { p: "sol", c: "clima", i: "☀️" }, { p: "luna", c: "clima", i: "🌙" }, { p: "estrella", c: "clima", i: "⭐" },
+            { p: "nube", c: "clima", i: "☁️" }, { p: "lluvia", c: "clima", i: "🌧️" }, { p: "nieve", c: "clima", i: "❄️" }, { p: "rayo", c: "clima", i: "⚡" },
+            { p: "arcoíris", c: "clima", i: "🌈" }, { p: "fuego", c: "clima", i: "🔥" }, { p: "árbol", c: "clima", i: "🌳" }, { p: "flor", c: "clima", i: "🌻" },
             { p: "montaña", c: "clima", i: "⛰️" }, { p: "mar", c: "clima", i: "🌊" }, { p: "volcán", c: "clima", i: "🌋" }, { p: "cactus", c: "clima", i: "🌵" },
-            { p: "planeta", c: "clima", i: "🪐" }, { p: "viento", c: "clima", i: "💨" }, { p: "tornado", c: "clima", i: "🌪️" }, { p: "isla", c: "clima", i: "🏝️" },
-            // DEPORTES
             { p: "fútbol", c: "deportes", i: "⚽" }, { p: "baloncesto", c: "deportes", i: "🏀" }, { p: "tenis", c: "deportes", i: "🎾" }, { p: "béisbol", c: "deportes", i: "⚾" },
-            { p: "natación", c: "deportes", i: "🏊" }, { p: "boxeo", c: "deportes", i: "🥊" }, { p: "patinaje", c: "deportes", i: "⛸️" }, { p: "esquí", c: "deportes", i: "🎿" },
-            { p: "ajedrez", c: "deportes", i: "♟️" }, { p: "videojuegos", c: "deportes", i: "🎮" }, { p: "pesca", c: "deportes", i: "🎣" }, { p: "carrera", c: "deportes", i: "🏃" },
-            { p: "bicicleta", c: "deportes", i: "🚵" }, { p: "golf", c: "deportes", i: "⛳" }, { p: "bolos", c: "deportes", i: "🎳" }, { p: "yoga", c: "deportes", i: "🧘" },
-            { p: "surf", c: "deportes", i: "🏄" }, { p: "karate", c: "deportes", i: "🥋" }, { p: "trofeo", c: "deportes", i: "🏆" }, { p: "medalla", c: "deportes", i: "🥇" }
+            { p: "natación", c: "deportes", i: "🏊" }, { p: "boxeo", c: "deportes", i: "🥊" }, { p: "ajedrez", c: "deportes", i: "♟️" }, { p: "videojuegos", c: "deportes", i: "🎮" },
+            { p: "pesca", c: "deportes", i: "🎣" }, { p: "golf", c: "deportes", i: "⛳" }, { p: "yoga", c: "deportes", i: "🧘" }, { p: "trofeo", c: "deportes", i: "🏆" }
         ];
 
         let score = 0;
@@ -252,19 +226,12 @@
         let mistakes = [];
         let shuffledList = [];
         let currentCategory = "todas";
-        let vocesDisponibles = [];
 
         const categoryEmojis = {
             "animales": "🦁", "frutas": "🍎", "escuela": "🎒", 
             "transporte": "🚀", "ropa": "👕", "hogar": "🏠", 
             "cuerpo": "💪", "música": "🎸", "clima": "🌈", "deportes": "⚽"
         };
-
-        // Cargar voces para navegadores que lo requieren (Chrome/Firefox)
-        function actualizarVoces() {
-            vocesDisponibles = window.speechSynthesis.getVoices();
-        }
-        window.speechSynthesis.onvoiceschanged = actualizarVoces;
 
         function buildMenu() {
             const menuContainer = document.getElementById('categories-menu');
@@ -280,8 +247,7 @@
             categories.forEach(cat => {
                 const btn = document.createElement('button');
                 btn.className = "cat-btn";
-                const emoji = categoryEmojis[cat] || "📂";
-                btn.innerHTML = `${emoji} ${cat.toUpperCase()}`;
+                btn.innerHTML = `${categoryEmojis[cat] || "📂"} ${cat.toUpperCase()}`;
                 btn.onclick = () => startGame(cat);
                 menuContainer.appendChild(btn);
             });
@@ -293,22 +259,12 @@
         }
 
         function startGame(category) {
-            // Desbloqueo inicial de audio para navegadores móviles
-            actualizarVoces();
-            const silence = new SpeechSynthesisUtterance("");
-            window.speechSynthesis.speak(silence);
-
             currentCategory = category;
             score = 0;
             mistakes = [];
             updateScore();
-
-            if (category === "todas") {
-                shuffledList = [...database].sort(() => Math.random() - 0.5);
-            } else {
-                shuffledList = database.filter(item => item.c === category).sort(() => Math.random() - 0.5);
-            }
-
+            shuffledList = (category === "todas" ? [...database] : database.filter(item => item.c === category))
+                           .sort(() => Math.random() - 0.5);
             document.getElementById('menu-screen').classList.remove('active');
             document.getElementById('game-screen').classList.add('active');
             nextQuestion();
@@ -317,11 +273,11 @@
         function nextQuestion() {
             if (shuffledList.length === 0) {
                 if (mistakes.length > 0) {
-                    alert("¡Buen trabajo! Vamos a repasar las que fallaste.");
+                    alert("¡Repasemos los fallos!");
                     shuffledList = [...mistakes];
                     mistakes = [];
                 } else {
-                    alert("¡Genial! Has terminado esta categoría.");
+                    alert("¡Categoría completada!");
                     showMenu();
                     return;
                 }
@@ -336,11 +292,8 @@
         function generateOptions() {
             const container = document.getElementById('options');
             container.innerHTML = "";
-            let distractors = database
-                .filter(x => x.c === currentItem.c && x.p !== currentItem.p)
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 3)
-                .map(x => x.p);
+            let distractors = database.filter(x => x.c === currentItem.c && x.p !== currentItem.p)
+                                      .sort(() => Math.random() - 0.5).slice(0, 3).map(x => x.p);
             let options = [currentItem.p, ...distractors].sort(() => Math.random() - 0.5);
             options.forEach(opt => {
                 const btn = document.createElement('button');
@@ -353,7 +306,6 @@
         function checkAnswer(selected, btn) {
             const buttons = document.querySelectorAll('#options button');
             buttons.forEach(b => b.disabled = true);
-
             if (selected === currentItem.p) {
                 btn.classList.add('correct');
                 document.getElementById('feedback').innerHTML = "¡Muy bien! 🌟";
@@ -365,37 +317,40 @@
                 btn.classList.add('incorrect');
                 document.getElementById('feedback').innerHTML = `Es "${currentItem.p.toUpperCase()}"`;
                 mistakes.push(currentItem);
-                buttons.forEach(b => {
-                    if (b.textContent === currentItem.p) b.classList.add('correct');
-                });
+                buttons.forEach(b => { if (b.textContent === currentItem.p) b.classList.add('correct'); });
                 setTimeout(nextQuestion, 2500);
             }
         }
 
-        function updateScore() {
-            document.getElementById('score').textContent = score;
-        }
+        function updateScore() { document.getElementById('score').textContent = score; }
 
+        // --- FUNCIÓN DE AUDIO REFORZADA ---
         function speakCurrentWord() {
             if ('speechSynthesis' in window) {
-                // Cancelar cualquier audio previo
-                window.speechSynthesis.cancel();
+                window.speechSynthesis.cancel(); // Detener audios previos
+                const msg = new SpeechSynthesisUtterance(currentItem.p);
                 
-                const msg = new SpeechSynthesisUtterance();
-                msg.text = currentItem.p;
-                
-                // FORZAR IDIOMA Y BUSCAR VOZ ESPAÑOLA
+                // Forzamos idioma español
                 msg.lang = 'es-ES';
                 
-                if (vocesDisponibles.length === 0) actualizarVoces();
+                // Buscamos voces de España o que contengan "spanish"
+                const voices = window.speechSynthesis.getVoices();
+                const preferredVoice = voices.find(v => v.lang.includes('es-ES') && v.name.includes('Google')) 
+                                    || voices.find(v => v.lang.includes('es'))
+                                    || voices.find(v => v.name.toLowerCase().includes('spanish'));
                 
-                const vozEspanola = vocesDisponibles.find(v => v.lang.includes('es'));
-                if (vozEspanola) msg.voice = vozEspanola;
+                if (preferredVoice) {
+                    msg.voice = preferredVoice;
+                }
 
-                msg.rate = 0.85; 
+                msg.rate = 0.85;
+                msg.pitch = 1.0;
                 window.speechSynthesis.speak(msg);
             }
         }
+
+        // Cargar voces al iniciar (necesario para Chrome/Firefox en Android)
+        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
 
         buildMenu();
     </script>
